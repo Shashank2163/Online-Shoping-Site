@@ -5,7 +5,7 @@ $val = 0;
 if (isset($_GET['sku'])) {
     $sku = $_GET['sku'];
     if ($_GET['action'] == 'delete') {
-        $sql = "DELETE FROM categories WHERE category_id=$sku";
+        $sql = "DELETE FROM colors WHERE product_id=$sku";
         if (mysqli_query($conn, $sql)) {
             echo "record deleted successfully";
         } else {
@@ -19,23 +19,27 @@ if (isset($_GET['sku'])) {
 }
 ?>
 <?php
+
 if (isset($_POST['submit'])) {
     if ($val == 1) {
-        // echo "hi i am update";
+        echo "hi i am update";
         $sku = $_POST["SKU"];
-        $name = $_POST["name"];
-        $sql = "UPDATE categories SET name='$name' WHERE category_id=$sku";
+        $quantity = $_POST["quantity"];
+        $colour = $_POST["colour"];
+        $sql = "UPDATE colors SET colors='$colour',quantity=$quantity WHERE product_id=$sku";
         $result = mysqli_query($conn, $sql);
-        header('location:categories.php');
-    } else if ($val == 0) {
-        $sku = $_POST["SKU"];
-        $name = $_POST["name"];
-        $sql = "INSERT INTO categories VALUES($sku,'$name')";
-        if (mysqli_query($conn, $sql)) {
-            // echo "row inserted successfully";
-
-        } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        header('location:colours.php');
+    } else {
+        if ($val == 0) {
+            $sku = $_POST["SKU"];
+            $quantity = $_POST["quantity"];
+            $colour = $_POST["colour"];
+            $sql = "INSERT INTO colors (product_id,colors,quantity) VALUES($sku,'$colour',$quantity)";
+            if (mysqli_query($conn, $sql)) {
+                // echo "row inserted successfully";
+            } else {
+                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            }
         }
     }
 }
@@ -61,34 +65,33 @@ if (isset($_POST['submit'])) {
     <p id="page-intro">What would you like to do?</p>
     <div class="content-box">
         <div class="content-box-header">
-            <h3>CATEGORIES</h3>
+            <h3>MANAGE COLORS </h3>
             <ul class="content-box-tabs">
-                <li><a href="#tab1" <?php if ($val == 0) : ?>class="default-tab" <?php
-                                                                            endif ?>>Manage</a></li>
-                <li><a href="#tab2" <?php if ($val == 1) : ?>class="default-tab" <?php
-                                                                            endif ?>>Add</a></li>
+                <li><a href="#tab1" <?php if ($val == 0) : ?>class="default-tab" <?php endif ?>>Manage</a></li>
+                <li><a href="#tab2" <?php if ($val == 1) : ?>class="default-tab" <?php endif ?>>Add</a></li>
             </ul>
             <div class="clear"></div>
         </div>
         <!-- End .content-box-header -->
         <div class="content-box-content">
-            <div class='tab-content<?php if ($val == 0) : ?>default-tab<?php
-                                                                    endif ?>' id="tab1">
+            <div class='tab-content<?php if ($val == 0) : ?>default-tab<?php endif ?>' id="tab1">
                 <!-- This is the target div. id must match the href of this div's tab -->
                 <table>
                     <thead>
                         <tr>
                             <th><input class="check-all" type="checkbox" /></th>
-                            <th>Category_id</th>
-                            <th>name</th>
+                            <th>Product_id</th>
+                            <th>Quantity</th>
+                            <th>Colour</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
 
                         <?php
+
                         // $sql="SELECT * FROM addproduct LIMIT $offset, $limit";
-                        $sql = "SELECT * FROM categories";
+                        $sql = "SELECT * FROM colors";
                         $result = mysqli_query($conn, $sql);
 
                         if (mysqli_num_rows($result) > 0) {
@@ -96,26 +99,26 @@ if (isset($_POST['submit'])) {
                             while ($row = mysqli_fetch_assoc($result)) {
                                 echo '<tr>
 									<td><input type="checkbox"/></td>
-                                    <td>' . $row["category_id"] . '</td>
-                                    <td>' . $row["name"] . '</td>
+									<td>' . $row["product_id"] . '</td>
+									
+									<td>' . $row["quantity"] . '</td>
 								
+									<td>' . $row["colors"] . '</td>
+									
+									
 									<td>
 										<!-- Icons -->
-										 <a href="categories.php?sku=' . $row["category_id"] . '&name=' . $row["name"] . '&action=edit" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
-										 <a id="subject" href="categories.php?sku=' . $row["category_id"] . '&action=delete" title="Delete"><img src="resources/images/icons/cross.png" alt="Delete" /></a> 
+										 <a href="colours.php?sku=' . $row["product_id"] . '&quantity=' . $row["quantity"] . '&action=edit" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
+										 <a id="subject" href="colours.php?sku=' . $row["product_id"] . '&action=delete" title="Delete"><img src="resources/images/icons/cross.png" alt="Delete" /></a> 
 										
 									</td>
 								</tr>';
                             }
                         }
-                        ?>
-                    </tbody>
+                        ?> </tbody>
                 </table>
-            </div>
-
-            <!-- End #tab1 -->
-            <div class='tab-content<?php if ($val == 1) : ?>default-tab<?php
-                                                                    endif ?>' id="tab2">
+            </div> <!-- End #tab1 -->
+            <div class='tab-content<?php if ($val == 1) : ?>default-tab<?php endif ?>' id="tab2">
                 <?php if (isset($_GET['sku'])) :
                     $sql = "SELECT * FROM colors WHERE product_id='" . $_GET['sku'] . "'";
                     $result = mysqli_query($conn, $sql);
@@ -125,17 +128,33 @@ if (isset($_POST['submit'])) {
                 <form action="" method="post" enctype="multipart/form-data">
                     <fieldset>
                         <p>
-                            <label>Category Id</label>
+                            <label>Product SKU</label>
                             <input class="text-input small-input" type="text" id="small-input" name="SKU" value="<?php if ($val == 1) {
                                                                                                                         echo $_GET['sku'];
-                                                                                                                    } ?>" /> <!-- Classes for input-notification: success, error, information, attention -->
+                                                                                                                    } ?>">
+                            <!-- Classes for input-notification: success, error, information, attention -->
                             <br /><small>A small description of the field</small>
                         </p>
+
+
                         <p>
-                            <label>Name</label>
-                            <input class="text-input small-input" type="text" id="small-input" name="name" value="" /> <!-- Classes for input-notification: success, error, information, attention -->
+                            <label>Quantity</label>
+                            <input class="text-input small-input" type="text" id="small-input" name="quantity" value="<?php if ($val == 1) {
+                                                                                                                            echo $_GET['quantity'];
+                                                                                                                        } ?>" /> <!-- Classes for input-notification: success, error, information, attention -->
                             <br /><small>A small description of the field</small>
                         </p>
+
+                        <label>Colour</label>
+                        <select name="colour">
+                            <option value="Black" <?php if (isset($row['Colour']) && $row['Colour'] == "Black") { ?> selected="selected" <?php } ?>>Black</option>
+                            <option value="Blue" <?php if (isset($row['Colour']) && $row['Colour'] == "Blue") { ?> selected="selected" <?php } ?>>Blue</option>
+                            <option value="Red" <?php if (isset($row['Colour']) && $row['Colour'] == "Red") { ?> selected="selected" <?php } ?>>Red</option>
+                            <option value="Violet" <?php if (isset($row['Colour']) && $row['Colour'] == "Violet") { ?> selected="selected" <?php } ?>>Violet</option>
+                            <option value="Yellow" <?php if (isset($row['Colour']) && $row['Colour'] == "Yellow") { ?> selected="selected" <?php } ?>>Yellow</option>
+                            <option value="Green" <?php if (isset($row['Colour']) && $row['Colour'] == "Green") { ?> selected="selected" <?php } ?>>Green</option>
+                        </select>
+
                         <p>
                             <input class="button" type="submit" value="Submit" name="submit" />
                         </p>
