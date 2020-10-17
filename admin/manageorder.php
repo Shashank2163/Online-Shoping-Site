@@ -4,7 +4,7 @@ include('header.php'); ?>
 if (isset($_GET['sku'])) {
     $sku = $_GET['sku'];
     if ($_GET['action'] == 'delete') {
-        $sql = "DELETE FROM productsnew WHERE product_id=$sku";
+        $sql = "DELETE FROM cart WHERE id=$sku";
         if (mysqli_query($conn, $sql)) {
             echo "record deleted successfully";
         } else {
@@ -13,35 +13,7 @@ if (isset($_GET['sku'])) {
     }
 }
 ?>
-<?php
-if (isset($_POST['submit'])) {
-    if (isset($_POST['q1'])) {
-        $q1 = implode(',', $_POST['q1']);
-    }
-    $name = $_POST["name"];
-    $price = $_POST["price"];
-    $image = $_FILES["image"]["name"];
-    $categories = $_POST["categories"];
-    $description = $_POST["short_description"];
-    if (isset($_FILES["image"])) {
-        if (move_uploaded_file($_FILES["image"]["tmp_name"], "upload/" . $image)) {
-            // echo "image uploaded successfully";
 
-        } else {
-            echo "upload failed";
-        }
-    }
-    $sql = "INSERT INTO productsnew (`name`,price,`image`,category,tags,`description`) VALUES('$name',$price,'$image','$categories','$q1','$description')";
-    if (mysqli_query($conn, $sql)) {
-        // header("location:products.php");
-        // echo "row inserted successfully";
-
-    } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-    }
-}
-
-?>
 <!-- Wrapper for the radial gradient background -->
 <?php include('siderbar.php'); ?>
 
@@ -62,10 +34,10 @@ if (isset($_POST['submit'])) {
     <p id="page-intro">What would you like to do?</p>
     <div class="content-box">
         <div class="content-box-header">
-            <h3>PRODUCTS</h3>
+            <h3>CART</h3>
             <ul class="content-box-tabs">
                 <li><a href="#tab1" class="default-tab">Manage</a></li>
-                <li><a href="#tab2">Add</a></li>
+                <!-- <li><a href="#tab2">Add</a></li> -->
             </ul>
             <div class="clear"></div>
         </div>
@@ -79,11 +51,11 @@ if (isset($_POST['submit'])) {
                         <tr>
                             <th><input class="check-all" type="checkbox" /></th>
                             <th>Product Id </th>
-                            <th>Name</th>
+                            <th>Username</th>
                             <th>Price</th>
                             <th>Image</th>
-                            <th>Tags</th>
-                            <th>Categories</th>
+                            <th>Name</th>
+                            <th>Quantitity </th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -100,24 +72,24 @@ if (isset($_POST['submit'])) {
                             $page = 1;
                         }
                         $offset = ($page - 1) * $limit;
-                        $sql = "SELECT * FROM productsnew limit {$offset},{$limit}";
+                        $sql = "SELECT * FROM cart limit {$offset},{$limit}";
                         $result = mysqli_query($conn, $sql);
                         if (mysqli_num_rows($result) > 0) {
                             //echo "yes here it is";
                             while ($row = mysqli_fetch_assoc($result)) {
                                 echo '<tr>
 									<td><input type="checkbox"/></td>
-									<td>' . $row["product_id"] . '</td>
-									<td>' . $row["name"] . '</td>
+									<td>' . $row["id"] . '</td>
+									<td>' . $row["username"] . '</td>
 									<td>' . $row["price"] . '</td>
 									<td><img src="upload/' . $row["image"] . '"  width="100" height="100"></td>	
-									<td>' . $row["tags"] . '</td>
-									<td>' . $row["category"] . '</td>
+                                    <td>' . $row["name"] . '</td>
+                                    <td>' . $row["quantity"] . '</td>
 									
 									<td>
 										<!-- Icons -->
-										 <a href="updateproduct.php?sku=' . $row["product_id"] . '&name=' . $row["name"] . '&price=' . $row["price"] . '&image=' . $row["image"] . '&action=edit" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
-										 <a id="subject" href="products.php?sku=' . $row["product_id"] . '&action=delete" title="Delete"><img src="resources/images/icons/cross.png" alt="Delete" /></a> 
+										 <a href="updateorder.php?sku=' . $row["username"] . '&name=' . $row["name"] . '&price=' . $row["price"] . '&image=' . $row["image"] . '&quantity=' . $row["quantity"] . '&action=edit" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
+										 <a id="subject" href="manageorder.php?sku=' . $row["id"] . '&action=delete" title="Delete"><img src="resources/images/icons/cross.png" alt="Delete" /></a> 
 										
 									</td>
 								</tr>';
@@ -128,7 +100,7 @@ if (isset($_POST['submit'])) {
             </div>
             </table>
             <?php
-            $sql1 = "Select * from productsnew";
+            $sql1 = "Select * from cart";
             $result1 = mysqli_query($conn, $sql1) or die("error");
             if (mysqli_num_rows($result1) > 0) {
                 $total_records = mysqli_num_rows($result1);
@@ -136,7 +108,7 @@ if (isset($_POST['submit'])) {
                 $total_page = ceil($total_records / $limit);
                 echo '<div class="pagination">';
                 if ($page > 1) {
-                    echo '<a href="products.php?page=' . ($page - 1) . '" title="First Page">Previous>></a>';
+                    echo '<a href="manageorder.php.php?page=' . ($page - 1) . '" title="First Page">Previous>></a>';
                 }
                 for ($i = 1; $i <= $total_page; $i++) {
                     if ($i == $page) {
@@ -147,7 +119,7 @@ if (isset($_POST['submit'])) {
                     echo '<a  class="' . $active . '" href="products.php?page=' . $i . '" class="number" title="1">' . $i . '</a>';
                 }
                 if ($total_page > $page) {
-                    echo '<a href="products.php?page=' . ($page + 1) . '" title="Next Page">Next>></a>';
+                    echo '<a href="manageorder.php?page=' . ($page + 1) . '" title="Next Page">Next>></a>';
                 }
                 echo '</div>';
             }
@@ -158,7 +130,7 @@ if (isset($_POST['submit'])) {
 
         <div class="tab-content" id="tab2">
             <?php if (isset($_GET['sku'])) :
-                $sql = "SELECT * FROM `addproduct1` WHERE ProductSKU='" . $_GET['sku'] . "'";
+                $sql = "SELECT * FROM `cart` WHERE ProductSKU='" . $_GET['sku'] . "'";
                 $result = mysqli_query($conn, $sql);
                 $row = mysqli_fetch_assoc($result);
             endif
@@ -172,7 +144,7 @@ if (isset($_POST['submit'])) {
                     </p>
                     <p>
                         <label>Price</label>
-                        <input class="text-input small-input" type="number" id="small-input" name="price" value="" />
+                        <input class="text-input small-input" type="text" id="small-input" name="price" value="" />
                         <!-- Classes for input-notification: success, error, information, attention -->
                         <br /><small>A small description of the field</small>
                     </p>

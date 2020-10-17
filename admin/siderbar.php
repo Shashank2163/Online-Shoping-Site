@@ -8,8 +8,12 @@
             'products.php',
             'categories.php',
             'tags.php',
-            'colours.php'
+            'colours.php',
+
+
         );
+        $product1 = array('users.php');
+        $product2 = array('manageorder.php');
         // print_r($product);
 
         ?>
@@ -42,7 +46,7 @@
                                                                                     endif ?>href="products.php">Manage Product</a></li>
                     <!-- Add class "current" to sub menu items also -->
                     <li><a <?php if ($filename == 'categories.php') : ?> class="current" <?php
-                                                                                    endif ?> href="categories.php">Manage Categories</a></li>
+                                                                                        endif ?> href="categories.php">Manage Categories</a></li>
                     <li><a <?php if ($filename == 'colours.php') : ?> class="current" <?php
                                                                                     endif ?> href="colours.php">Manage Colours</a></li>
                     <li><a <?php if ($filename == 'tags.php') : ?> class="current" <?php
@@ -50,19 +54,22 @@
                 </ul>
             </li>
             <li>
-                <a href="#" class="nav-top-item ">
+                <a href="#" class="nav-top-item<?php if (in_array($filename, $product1)) : ?> current<?php
+                                                                                                    endif ?> ">
                     Users
                 </a>
                 <ul>
-                    <li><a href="users.php">Manage Users</a></li>
+                    <li><a <?php if ($filename == 'users.php') : ?> class="current" <?php
+                                                                                endif ?> href="users.php">Manage Users</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#" class="nav-top-item">
+                <a href="#" class="nav-top-item<?php if (in_array($filename, $product2)) : ?> current<?php endif ?>">
                     Orders
                 </a>
                 <ul>
-                    <li><a href="#">Manage Orders</a></li>
+                    <li><a <?php if ($filename == 'manageorder.php') : ?> class="current" <?php
+                                                                                        endif ?> href="manageorder.php">Manage Orders</a></li>
                 </ul>
             </li>
             <li>

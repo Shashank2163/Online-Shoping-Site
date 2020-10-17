@@ -10,20 +10,20 @@ if (isset($_GET['sku'])) {
         }
         $sku = $_GET['sku'];
         $name = $_POST["name"];
+        $username = $_POST["username"];
         $price = $_POST["price"];
         $image = $_FILES["image"]["name"];
-        $categories = $_POST["categories"];
-        $description = $_POST["short_description"];
+        $quantity = $_POST["quantity"];
         // echo $image;
         if ($image == NULL) {
             $image = $_GET['image'];
         }
         $tempname = $_FILES["image"]["name"];
         $folder = "upload/" . $image;
-        $sql = "UPDATE productsnew SET name='$name',price=$price,`image`='$image',tags='$q1',category='$categories',`description`='$description' WHERE product_id=$sku";
+        $sql = "UPDATE cart SET username='$username',name='$name',price=$price,`image`='$image',`quantity`=$quantity WHERE username='$sku'";
 
         if (mysqli_query($conn, $sql)) {
-            header('location:products.php');
+            header('location:manageorder.php');
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
@@ -61,13 +61,18 @@ if (isset($_GET['sku'])) {
 
         <div class="tab-content default-tab" id="tab2">
             <?php if (isset($_GET['sku'])) :
-                $sql = "SELECT * FROM `addproduct1` WHERE ProductSKU='" . $_GET['sku'] . "'";
+                $sql = "SELECT * FROM `cart` WHERE username='" . $_GET['sku'] . "'";
                 $result = mysqli_query($conn, $sql);
                 $row = mysqli_fetch_assoc($result);
             endif
             ?>
             <form action="" method="post" enctype="multipart/form-data">
                 <fieldset>
+                    <p>
+                        <label>Username</label>
+                        <input class="text-input small-input" type="text" id="small-input" name="username" value="<?php echo $_GET['sku'] ?>" /> <!-- Classes for input-notification: success, error, information, attention -->
+                        <br /><small>A small description of the field</small>
+                    </p>
                     <p>
                         <label>Name</label>
                         <input class="text-input small-input" type="text" id="small-input" name="name" value="<?php echo $_GET['name'] ?>" /> <!-- Classes for input-notification: success, error, information, attention -->
@@ -89,35 +94,14 @@ if (isset($_GET['sku'])) {
                         <input class="text-input small-input" type="file" id="small-input" name="image" value="" /> <!-- Classes for input-notification: success, error, information, attention -->
                         <br /><small>A small description of the field</small>
                     </p>
+
                     <p>
-                        <label>Categories</label>
-                        <select name="categories" class="small-input">
-                            <option value="Men" <?php if (isset($row['Categories']) && $row['Categories'] == "Men") { ?> selected="selected" <?php
-                                                                                                                                            } ?>>Men</option>
-                            <option value="Women" <?php if (isset($row['Categories']) && $row['Categories'] == "Women") { ?> selected="selected" <?php
-                                                                                                                                                } ?>>Women</option>
-                            <option value="Kids" <?php if (isset($row['Categories']) && $row['Categories'] == "Kids") { ?> selected="selected" <?php
-                                                                                                                                            } ?>>Kids</option>
-                            <option value="Electronis" <?php if (isset($row['Categories']) && $row['Categories'] == "Electronis") { ?> selected="selected" <?php
-                                                                                                                                                        } ?>>Electronis</option>
-                            <option value="Sports" <?php if (isset($row['Categories']) && $row['Categories'] == "Sports") { ?> selected="selected" <?php
-                                                                                                                                                } ?>>Sports</option>
-                        </select>
+                        <label>Quantity</label>
+                        <input class="text-input small-input" type="text" id="small-input" name="quantity" value="<?php echo $_GET['quantity'] ?>" />
+                        <!-- Classes for input-notification: success, error, information, attention -->
+                        <br /><small>A small description of the field</small>
                     </p>
-                    <p>
-                        <label>Tags </label>
-                        <input name="q1[]" type="checkbox" value="fashion">Fashion
-                        <input name="q1[]" type="checkbox" value="ecommerce">Ecommerce
-                        <input name="q1[]" type="checkbox" value="shop">Shop
-                        <input name="q1[]" type="checkbox" value="handbag">Handbag
-                        <input name="q1[]" type="checkbox" value="laptop">Laptop
-                        <input name="q1[]" type="checkbox" value="headphone">Headphone
-                    </p>
-                    <p>
-                        <label>Description</label>
-                        <textarea name="short_description" rows="4" cols="50">
-                            </textarea>
-                    </p>
+
                     <p>
                         <input class="button" type="submit" value="UPDATE" name="submit" />
                     </p>
