@@ -123,7 +123,7 @@ if (isset($_GET['id'])) {
                           <td><a href="#"><img src="../admin/upload/<?php echo $row['image']; ?>" alt="img"></a></td>
                           <td><a class="aa-cart-title" href="#"><?php echo $row['name']; ?></a></td>
                           <td> <?php echo $row['price']; ?></td>
-                          <td><input class="aa-cart-quantity" type="text" value="<?php echo $row['quantity']; ?>"><a href="javascript:onUpdateAdd($)" id="a1">+</a><a href="javascript:onUpdateRemove(' + i + ')" id="a2">-</a></td>
+                          <td><input class="aa-cart-quantity" type="text" value="<?php echo $row['quantity']; ?>"></td>
                           <td><?php echo $row['price'] * $row['quantity']; ?></td>
                           <?php $s += $row['price'] * $row['quantity']; ?>
                         </tr>

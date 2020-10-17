@@ -443,40 +443,15 @@ if (isset($_GET['id'])) {
                   $page = 1;
                 }
                 $offset = ($page - 1) * $limit;
-                // $sql = "SELECT * FROM productsnew limit {$offset},{$limit}";
-                if ('men' == $_GET['id']) {
-                  $sql = "SELECT * FROM productsnew  where category='Men' ";
-                } else if ('women' == $_GET['id']) {
-                  $sql = "SELECT * FROM productsnew where category='Women'";
-                } else if ('kids' == $_GET['id']) {
-
-                  $sql = "SELECT * FROM productsnew where category='Kids'";
-                } else if ('electronics' == $_GET['id']) {
-
-                  $sql = "SELECT * FROM productsnew where category='Electronis'";
-                } else if ('sports' == $_GET['id']) {
-
-                  $sql = "SELECT * FROM productsnew where category='Sports'";
-                } else if ('fashion' == $_GET['val']) {
-                  $sql = "SELECT * FROM productsnew where tags='fashion' ";
-                } else if ('ecommerce' == $_GET['val']) {
-                  $sql = "SELECT * FROM productsnew where tags='ecommerce'";
-                } else if ('shop' == $_GET['id']) {
-
-                  $sql = "SELECT * FROM productsnew where tags='shop'";
-                } else if ('handbag' == $_GET['val']) {
-
-                  $sql = "SELECT * FROM productsnew where tags='handbag'";
-                } else if ('laptop' == $_GET['val']) {
-
-                  $sql = "SELECT * FROM productsnew where tags='laptop'";
-                } else if ('headpone' == $_GET['val']) {
-
-                  $sql = "SELECT * FROM productsnew where tags='headphone'";
+                if (isset($_GET['cat'])) {
+                  $category = $_GET['ccat'];
+                  $sql = "SELECT * FROM productsnew   where category='$category'";
+                } else if (isset($_GET['val'])) {
+                  $tags = $_GET['val'];
+                  $sql = "SELECT * FROM productsnew   where tags LIKE '%{$tags}%'";
                 } else {
                   $sql = "SELECT * FROM productsnew limit {$offset},{$limit}";
                 }
-                // $sql = "SELECT * FROM productsnew"; 
                 ?>
                 <?php $result = mysqli_query($conn, $sql); ?>
                 <?php $result = mysqli_query($conn, $sql); ?>
@@ -585,7 +560,9 @@ if (isset($_GET['id'])) {
             <div class="aa-product-catg-pagination">
               <nav>
                 <?php
+
                 $sql1 = "Select * from productsnew";
+
                 $result1 = mysqli_query($conn, $sql1) or die("error");
                 if (mysqli_num_rows($result1) > 0) {
                   $total_records = mysqli_num_rows($result1);
@@ -619,11 +596,11 @@ if (isset($_GET['id'])) {
             <div class="aa-sidebar-widget">
               <h3>Category</h3>
               <ul class="aa-catg-nav">
-                <li><a href="product.php?id=men">Men</a></li>
-                <li><a href="product.php?id=women">Women</a></li>
-                <li><a href="product.php?id=kids">Kids</a></li>
-                <li><a href="product.php?id=electronics">Electornics</a></li>
-                <li><a href="product.php?id=sports">Sports</a></li>
+                <li><a href="product.php?cat=men">Men</a></li>
+                <li><a href="product.php?cat=women">Women</a></li>
+                <li><a href="product.php?cat=kids">Kids</a></li>
+                <li><a href="product.php?cat=Electronis">Electornics</a></li>
+                <li><a href="product.php?cat=sports">Sports</a></li>
               </ul>
             </div>
             <!-- single sidebar -->
@@ -635,7 +612,7 @@ if (isset($_GET['id'])) {
                 <a href="product.php?val=shop">Shop</a>
                 <a href=" product.php?val=handbag">Hand Bag</a>
                 <a href="product.php?val=laptop">Laptop</a>
-                <a href=" product.php?val=headphone">Head Phone</a>
+                <a href=" product.php?val=headphon">Head Phone</a>
               </div>
             </div>
             <!-- single sidebar -->
@@ -653,7 +630,7 @@ if (isset($_GET['id'])) {
               </div>
             </div>
             <!-- single sidebar -->
-            <div class="aa-sidebar-widget">
+            <!-- <div class="aa-sidebar-widget">
               <h3>Shop By Color</h3>
               <div class="aa-color-tag">
                 <a class="aa-color-green" href="#"></a>
@@ -669,7 +646,7 @@ if (isset($_GET['id'])) {
                 <a class="aa-color-olive" href="#"></a>
                 <a class="aa-color-orchid" href="#"></a>
               </div>
-            </div>
+            </div> -->
             <!-- single sidebar -->
             <div class="aa-sidebar-widget">
               <h3>Recently Views</h3>
