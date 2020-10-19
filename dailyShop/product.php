@@ -91,6 +91,7 @@ if (isset($_GET['id'])) {
   <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 </head>
 <!-- !Important notice -->
 <!-- Only for product page body tag have to added .productPage class -->
@@ -444,7 +445,7 @@ if (isset($_GET['id'])) {
                 }
                 $offset = ($page - 1) * $limit;
                 if (isset($_GET['cat'])) {
-                  $category = $_GET['ccat'];
+                  $category = $_GET['cat'];
                   $sql = "SELECT * FROM productsnew   where category='$category'";
                 } else if (isset($_GET['val'])) {
                   $tags = $_GET['val'];
@@ -459,10 +460,8 @@ if (isset($_GET['id'])) {
                   <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                     <li>
                       <figure>
-                        <a class="aa-product-img" href="product-detail.php?id=<?php echo $row['product_id']; ?>&price=
-                            <?php echo $row['price']; ?>&img=<?php echo $row['image']; ?>&name=<?php echo $row['name']; ?>"><img src="../admin/upload/<?php echo $row['image']; ?>" alt="polo shirt img"></a>
-                        <a class="aa-add-card-btn" href="product.php?id=<?php echo $row['product_id']; ?>&price=
-                            <?php echo $row['price']; ?>&img=<?php echo $row['image']; ?>&name=<?php echo $row['name']; ?>&action=addtocart"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                        <a class="aa-product-img" href="product-detail.php?id=<?php echo $row['product_id']; ?>&price=<?php echo $row['price']; ?>&img=<?php echo $row['image']; ?>&name=<?php echo $row['name']; ?>"><img src="../admin/upload/<?php echo $row['image']; ?>" alt="polo shirt img"></a>
+                        <a class="aa-add-card-btn" href="product.php?id=<?php echo $row['product_id']; ?>&price=<?php echo $row['price']; ?>&img=<?php echo $row['image']; ?>&name=<?php echo $row['name']; ?>&action=addtocart"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
                         <figcaption>
                           <h4 class="aa-product-title"><a href="#"><?php echo $row['name']; ?></a></h4>
                           <span class="aa-product-price"><?php echo $row['price']; ?></span><span class="aa-product-price"><del>$65.50</del></span>
@@ -470,10 +469,8 @@ if (isset($_GET['id'])) {
                         </figcaption>
                       </figure>
                       <div class="aa-product-hvr-content">
-                        <a href="wishlist.php?id=<?php echo $row['product_id']; ?>&price=
-                            <?php echo $row['price']; ?>&img=<?php echo $row['image']; ?>&name=<?php echo $row['name']; ?>&action=addtocart" data-toggle="tooltip" data-placement="top" title="Add to Wishlist"><span class="fa fa-heart-o"></span></a>
-                        <a href="product-detail.php?id=<?php echo $row['product_id']; ?>&price=
-                            <?php echo $row['price']; ?>&img=<?php echo $row['image']; ?>&name=<?php echo $row['name']; ?>"><span class="fa fa-search"></span></a>
+                        <a href="wishlist.php?id=<?php echo $row['product_id']; ?>&price=<?php echo $row['price']; ?>&img=<?php echo $row['image']; ?>&name=<?php echo $row['name']; ?>&action=addtocart" data-toggle="tooltip" data-placement="top" title="Add to Wishlist"><span class="fa fa-heart-o"></span></a>
+                        <a href="product-detail.php?id=<?php echo $row['product_id']; ?>&price=<?php echo $row['price']; ?>&img=<?php echo $row['image']; ?>&name=<?php echo $row['name']; ?>"><span class="fa fa-search"></span></a>
                       </div>
                       <!-- product badge -->
                       <span class="aa-badge aa-sale" href="#">SALE!</span>

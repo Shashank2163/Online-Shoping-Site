@@ -1,4 +1,5 @@
-<?php include('../admin/config.php'); ?>
+<?php include('../admin/config.php');
+error_reporting(0); ?>
 <?php
 if (isset($_GET['id'])) {
   if ($_GET['action'] == 'remove') {
@@ -9,7 +10,24 @@ if (isset($_GET['id'])) {
 }
 ?>
 <?php
+
+if (isset($_GET['submit'])) {
+  $sql = "SELECT * FROM cart";
+  $result = mysqli_query($conn, $sql);
+  $quant = $_GET['quant'];
+  foreach ($quant as $key => $val) {
+    $id = $key;
+    $quantity = $val;
+    $sql = "UPDATE cart SET quantity =$quantity WHERE id = $id;";
+    $result = $conn->query($sql);
+  }
+}
+
+
+?>
+<?php
 $msg = "";
+$x = true;
 if (isset($_GET['id'])) {
   if ($_GET['action'] == 'addtocart') {
     $sql = "SELECT * FROM cart";
@@ -17,27 +35,19 @@ if (isset($_GET['id'])) {
     $x = true;
     if (mysqli_num_rows($result) > 0) {
       while ($row = mysqli_fetch_assoc($result)) {
-        if ($_GET['id'] == $row['id'] && $username == $row['username']) {
-          $id = $_GET['id'];
-          $price = $_GET['price'];
-          $filename = $_GET['img'];
-          $quantity = $row['quantity'];
-          $quantity++;
-          $x = false;
-          $sql = "UPDATE  cart SET quantity='$quantity' where id='$id' and username='$username'";
-          mysqli_query($conn, $sql);
-        }
+        $x = false;
       }
     }
-    if ($x == true) {
-      $id = $_GET['id'];
-      $price = $_GET['price'];
-      $filename = $_GET['img'];
-      $name = $_GET['name'];
-      $quantity = 1;
-      $sql = "INSERT INTO cart VALUES('$username','$filename','$id',$price,$quantity,'$name')";
-      mysqli_query($conn, $sql);
-    }
+  }
+
+  if ($x == true) {
+    $id = $_GET['id'];
+    $price = $_GET['price'];
+    $filename = $_GET['img'];
+    $name = $_GET['name'];
+    $quantity = 1;
+    $sql = "INSERT INTO cart VALUES('$username','$filename','$id',$price,$quantity,'$name')";
+    mysqli_query($conn, $sql);
   }
 }
 ?>
@@ -59,35 +69,7 @@ if (isset($_GET['id'])) {
   </div>
 </section>
 <!-- / catg header banner section -->
-<script>
-  function onUpdateAdd(id) {
-    if (mysqli_num_rows($result) > 0) {
-      while ($row = mysqli_fetch_assoc($result)) {
-        if ($_GET['id'] == $row['id'] && $username == $row['username']) {
-          $id = $_GET['id'];
-          $quantity = $row['quantity'];
-          $quantity++;
-          $sql = "UPDATE  cart SET quantity='$quantity' where id='$id' ";
-          mysqli_query($conn, $sql);
-        }
-      }
-    }
-  }
 
-  function onUpdateRemove(id) {
-    if (mysqli_num_rows($result) > 0) {
-      while ($row = mysqli_fetch_assoc($result)) {
-        if ($_GET['id'] == $row['id'] && $username == $row['username']) {
-          $id = $_GET['id'];
-          $quantity = $row['quantity'];
-          $quantity--;
-          $sql = "UPDATE  cart SET quantity='$quantity' where id='$id' ";
-          mysqli_query($conn, $sql);
-        }
-      }
-    }
-  }
-</script>
 <!-- Cart view section -->
 <section id="cart-view">
   <div class="container">
@@ -95,7 +77,7 @@ if (isset($_GET['id'])) {
       <div class="col-md-12">
         <div class="cart-view-area">
           <div class="cart-view-table">
-            <form action="">
+            <form action="cart.php" method="GET">
               <div class="table-responsive">
                 <table class="table">
                   <thead>
@@ -123,12 +105,21 @@ if (isset($_GET['id'])) {
                           <td><a href="#"><img src="../admin/upload/<?php echo $row['image']; ?>" alt="img"></a></td>
                           <td><a class="aa-cart-title" href="#"><?php echo $row['name']; ?></a></td>
                           <td> <?php echo $row['price']; ?></td>
-                          <td><input class="aa-cart-quantity" type="text" value="<?php echo $row['quantity']; ?>"></td>
+                          <td><input class="aa-cart-quantity" type="number" name="quant[<?php echo $row['id']; ?>]" value="<?php echo $row['quantity']; ?>"></td>
                           <td><?php echo $row['price'] * $row['quantity']; ?></td>
                           <?php $s += $row['price'] * $row['quantity']; ?>
                         </tr>
                     <?php }
                     } ?>
+                    <tr>
+                      <td colspan="6" class="aa-cart-view-bottom">
+                        <div class="aa-cart-coupon">
+                          <input class="aa-coupon-code" type="text" placeholder="Coupon">
+                          <input class="aa-cart-view-btn" type="submit" value="Apply Coupon">
+                        </div>
+                        <input class="aa-cart-view-btn" type="submit" name="submit" value="Update Cart">
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>

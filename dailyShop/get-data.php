@@ -57,20 +57,55 @@
     $result = mysqli_query($conn, $sql) or die("Query Unsuccessful.");
     $output = array();
 
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $output .= "<tr>
-          
-            <td>{$row["image"]}</td>
-            <td a>{$row["price"]}</td>
-          </tr>";
+    $statement = $conn->prepare($sql);
+
+    $statement->execute();
+
+    // $result = $statement->mysqli_fetch_all();
+
+    $total_row = mysqli_num_rows($result);
+
+    $output = '
+    <h4 align="center">Total Item - ' . $total_row . '</h4>
+    <div class="row">
+    ';
+
+    if ($total_row > 0) {
+        foreach ($result as $row) {
+            $output .= '
+            <li>
+            <figure>
+          <a href="product-detail.php?id=' . $row['product_id'] . '&price=
+          ' . $row['price'] . '&img= ' . $row['image'] . '&name= ' . $row['name'] . '">  <img src="../admin/upload/' . $row["image"] . '" class="aa-product-img" /></a>
+              <a class="aa-add-card-btn" href="product.php?id=' . $row["product_id"] . '&price=
+                  ' . $row["price"] . ' &img=' . $row["image"] . ' &name =' . $row["name"] . '&action=addtocart"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+              <figcaption>
+                <h4 class="aa-product-title">' . $row['name'] . '</h4>
+                <span class="aa-product-price">' . $row["price"] . '</span><span class="aa-product-price"><del>$65.50</del></span>
+             
+              </figcaption>
+            </figure>
+            <div class="aa-product-hvr-content">
+              <a href="wishlist.php?id=' . $row["product_id"] . '&price=
+            ' . $row["price"] . '&img= echo ' . $row["image"] . '&name= ' . $row["name"] . '&action=addtocart" data-toggle="tooltip" data-placement="top" title="Add to Wishlist"><span class="fa fa-heart-o"></span></a>
+              <a href="product-detail.php?id=  ' . $row["product_id"] . ' &price=
+                  ' . $row["price"] . '&img=' . $row["image"] . '&name=  ' . $row["name"] . '"><span class="fa fa-search"></span></a>
+            </div>
+            <!-- product badge -->
+            <span class="aa-badge aa-sale" href="#">SALE!</span>
+          </li>
+            ';
         }
-
-        echo $output;
     } else {
-        echo "<h2>No Record Found.</h2>";
-        exit;
-    } ?>
-</body>
+        $output .= '
+            <h3 align="center">No Product Found</h3>
+        ';
+    }
 
-</html>
+    $output .= '
+    </div>
+    ';
+
+    echo $output;
+
+    ?>

@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Range Slider</title>
     <!-- jquery ui css -->
-
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -42,18 +41,12 @@
                 <label>Age Between:</label>
                 <span id="age"></span>
             </div>
-            <div id="slider-range"></div>
+            <div id="slider-range" style="width:100px; margin-left:100px;"></div>
         </div>
 
     </div>
     <div class="aa-product-catg-body">
         <ul class="aa-product-catg">
-            <div id="final">
-                <a class="aa-product-img" href="product-detail.php?&img=<?php echo $row["image"]; ?>"></a>
-                <td>
-                <td>
-                    </a>
-            </div>
         </ul>
     </div>
     <script>
@@ -89,7 +82,7 @@
                     success: function(data) {
                         // echo $data;
 
-                        $("#final .aa-product-img").html(data);
+                        $(".aa-product-catg").html(data);
 
                     }
                 });

@@ -1,9 +1,12 @@
+<?php
+error_reporting(0);
+?>
 <?php include('header.php') ?>
 <?php
 if (isset($_GET['id'])) {
   if ($_GET['action'] == 'remove') {
     $id = $_GET['id'];
-    $sql = "DELETE FROM wishlist WHERE id='$id' and username='$username'";
+    $sql = "DELETE FROM wishlist WHERE id=$id";
     $result = mysqli_query($conn, $sql);
   }
 }
@@ -12,7 +15,7 @@ if (isset($_GET['id'])) {
 $msg = "";
 if (isset($_GET['id'])) {
   if ($_GET['action'] == 'addtocart') {
-    $sql = "SELECT * FROM cart";
+    $sql = "SELECT * FROM wishlist";
     $result = mysqli_query($conn, $sql);
     $x = true;
     if (mysqli_num_rows($result) > 0) {
@@ -24,7 +27,7 @@ if (isset($_GET['id'])) {
           $quantity = $row['quantity'];
           $quantity++;
           $x = false;
-          $sql = "UPDATE  cart SET quantity='$quantity' where id='$id' and username='$username'";
+          $sql = "UPDATE  wishlist SET quantity='$quantity' where id='$id' or username='$username'";
           mysqli_query($conn, $sql);
         }
       }
@@ -35,7 +38,7 @@ if (isset($_GET['id'])) {
       $filename = $_GET['img'];
       $name = $_GET['name'];
       $quantity = 1;
-      $sql = "INSERT INTO wishlist VALUES('$username','$filename','$id',$price,$quantity,'$name')";
+      $sql = "INSERT INTO wishlist VALUES('$filename','$id',$price,$quantity,'$name')";
       mysqli_query($conn, $sql);
     }
   }
@@ -86,7 +89,7 @@ if (isset($_GET['id'])) {
                     if (mysqli_num_rows($result) > 0) {
                       while ($row = mysqli_fetch_assoc($result)) { ?>
                         <tr>
-                          <td><a class="remove" href="wishlist.php?id=<?php echo $row['id']; ?>&name=<?php echo $row['username']; ?>&action=remove">
+                          <td><a class="remove" href="wishlist.php?id=<?php echo $row['id']; ?>&action=remove">
                               <fa class="fa fa-close"></fa>
                             </a></td>
                           <td><a href="#"><img src="../admin/upload/<?php echo $row['image']; ?>" alt="img"></td>

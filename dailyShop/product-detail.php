@@ -92,9 +92,7 @@ $product_id = $_GET['id'];
                     </p>
                   </div>
                   <div class="aa-prod-view-bottom">
-                    <a class="aa-add-to-cart-btn" href="cart.php?id=<?php echo $product_id ?>&price=
-                            <?php echo $price; ?>&img=<?php echo $image; ?>&name=<?php echo $name; ?>&action=addtocart"><span class="fa fa-shopping-cart">Add To Cart</a>
-
+                    <a class="aa-add-to-cart-btn" href="cart.php?id=<?php echo $product_id ?>&price=<?php echo $price; ?>&img=<?php echo $image; ?>&name=<?php echo $name; ?>&action=addtocart"><span class="fa fa-shopping-cart">Add To Cart</a>
                   </div>
                 </div>
               </div>
