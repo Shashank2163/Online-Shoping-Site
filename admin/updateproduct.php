@@ -8,19 +8,24 @@ if (isset($_GET['sku'])) {
         if (isset($_POST['q1'])) {
             $q1 = implode(',', $_POST['q1']);
         }
+        if (isset($_POST['q2'])) {
+            $q2 = implode(',', $_POST['q2']);
+        }
+
         $sku = $_GET['sku'];
         $name = $_POST["name"];
         $price = $_POST["price"];
         $image = $_FILES["image"]["name"];
         $categories = $_POST["categories"];
         $description = $_POST["short_description"];
+
         // echo $image;
         if ($image == NULL) {
             $image = $_GET['image'];
         }
         $tempname = $_FILES["image"]["name"];
         $folder = "upload/" . $image;
-        $sql = "UPDATE productsnew SET name='$name',price=$price,`image`='$image',tags='$q1',category='$categories',`description`='$description' WHERE product_id=$sku";
+        $sql = "UPDATE productsnew SET name='$name',price=$price,`image`='$image',tags='$q1',category='$categories',`description`='$description' ,color='$q2' WHERE product_id=$sku";
 
         if (mysqli_query($conn, $sql)) {
             header('location:products.php');
@@ -112,6 +117,15 @@ if (isset($_GET['sku'])) {
                         <input name="q1[]" type="checkbox" value="handbag">Handbag
                         <input name="q1[]" type="checkbox" value="laptop">Laptop
                         <input name="q1[]" type="checkbox" value="headphone">Headphone
+                    </p>
+                    <p>
+                        <label>Colors </label>
+                        <input name="q2[]" type="checkbox" value="green">Green
+                        <input name="q2[]" type="checkbox" value="black">Black
+                        <input name="q2[]" type="checkbox" value="white">White
+                        <input name="q2[]" type="checkbox" value="cyan">Cyan
+                        <input name="q2[]" type="checkbox" value="olive">Olive
+                        <input name="q2[]" type="checkbox" value="orchid">Orchid
                     </p>
                     <p>
                         <label>Description</label>

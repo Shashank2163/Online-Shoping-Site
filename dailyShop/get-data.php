@@ -42,12 +42,23 @@
     <?php
 
     include('config.php');
-
+    // echo $_POST['range1'];
+    // echo $_POST['cat'];
     if (isset($_POST['range1']) && isset($_POST['range2'])) {
         $min = $_POST['range1'];
         $max = $_POST['range2'];
-
-        $sql = "SELECT * FROM productsnew WHERE price BETWEEN {$min} AND {$max}";
+        if (isset($_GET['cat'])) {
+            $category = $_GET['cat'];
+            $sql = "SELECT * FROM productsnew   where category='$category' and price BETWEEN {$min} AND {$max}";
+        } else if (isset($_GET['val'])) {
+            $tags = $_GET['val'];
+            $sql = "SELECT * FROM productsnew   where tags LIKE '%{$tags}%' and price BETWEEN {$min} AND {$max}";
+        } else if (isset($_GET['color'])) {
+            $color = $_GET['color'];
+            $sql = "SELECT * FROM productsnew   where color  LIKE '%{$color}%' and price BETWEEN {$min} AND {$max}";
+        } else {
+            $sql = "SELECT * FROM productsnew WHERE price BETWEEN {$min} AND {$max}";
+        }
     } else {
         $min = '';
         $max = '';
@@ -87,7 +98,7 @@
             </figure>
             <div class="aa-product-hvr-content">
               <a href="wishlist.php?id=' . $row["product_id"] . '&price=
-            ' . $row["price"] . '&img= echo ' . $row["image"] . '&name= ' . $row["name"] . '&action=addtocart" data-toggle="tooltip" data-placement="top" title="Add to Wishlist"><span class="fa fa-heart-o"></span></a>
+            ' . $row["price"] . '&img=' . $row["image"] . '&name= ' . $row["name"] . '&action=addtocart" data-toggle="tooltip" data-placement="top" title="Add to Wishlist"><span class="fa fa-heart-o"></span></a>
               <a href="product-detail.php?id=  ' . $row["product_id"] . ' &price=
                   ' . $row["price"] . '&img=' . $row["image"] . '&name=  ' . $row["name"] . '"><span class="fa fa-search"></span></a>
             </div>

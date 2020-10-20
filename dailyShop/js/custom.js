@@ -270,9 +270,7 @@ jQuery(function ($) {
   //   }
   // });
 
-
   $(document).ready(function () {
-
     var v1 = 150;
     var v2 = 3000;
 

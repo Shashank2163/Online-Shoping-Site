@@ -1,4 +1,4 @@
-<form action="update.php" method="post">
+<form action="" method="post">
 
     <input type="hidden" name="item[1][id]" value="100" />
     <input type="text" name="item[1][qty]" value="1" />
@@ -10,17 +10,19 @@
 
 </form>
 <?php
-if ('POST' === $_SERVER['REQUEST_METHOD']) {
-    if ('update' === $_POST['action']) {
 
-        $items = $_POST['item'];
+if (isset($_POST['action'])) {
 
-        foreach ($items as $item) {
+    $items = $_POST['item'];
+    print_r($items);
 
-            list($id, $qty) = $item;
+    foreach ($items as $item) {
 
-            #UPDATE cart SET qty = $qty WHERE product_id = $id AND user_id = $_SESSION['user_id']
+        // list($id, $qty) = $item;
 
-        }
+        print_r($item);
+        echo "erhj" . $id;
+        #UPDATE cart SET qty = $qty WHERE product_id = $id AND user_id = $_SESSION['user_id']
+
     }
 } ?>

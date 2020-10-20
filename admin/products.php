@@ -18,11 +18,15 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['q1'])) {
         $q1 = implode(',', $_POST['q1']);
     }
+    if (isset($_POST['q2'])) {
+        $q2 = implode(',', $_POST['q2']);
+    }
     $name = $_POST["name"];
     $price = $_POST["price"];
     $image = $_FILES["image"]["name"];
     $categories = $_POST["categories"];
     $description = $_POST["short_description"];
+    $color = $_POST["color"];
     if (isset($_FILES["image"])) {
         if (move_uploaded_file($_FILES["image"]["tmp_name"], "upload/" . $image)) {
             // echo "image uploaded successfully";
@@ -31,7 +35,7 @@ if (isset($_POST['submit'])) {
             echo "upload failed";
         }
     }
-    $sql = "INSERT INTO productsnew (`name`,price,`image`,category,tags,`description`) VALUES('$name',$price,'$image','$categories','$q1','$description')";
+    $sql = "INSERT INTO productsnew (`name`,price,`image`,category,tags,`description`,`color`) VALUES('$name',$price,'$image','$categories','$q1','$description','$q2')";
     if (mysqli_query($conn, $sql)) {
         // header("location:products.php");
         // echo "row inserted successfully";
@@ -83,6 +87,7 @@ if (isset($_POST['submit'])) {
                             <th>Price</th>
                             <th>Image</th>
                             <th>Tags</th>
+                            <th>Colors</th>
                             <th>Categories</th>
                             <th>Action</th>
                         </tr>
@@ -111,7 +116,8 @@ if (isset($_POST['submit'])) {
 									<td>' . $row["name"] . '</td>
 									<td>' . $row["price"] . '</td>
 									<td><img src="upload/' . $row["image"] . '"  width="100" height="100"></td>	
-									<td>' . $row["tags"] . '</td>
+                                    <td>' . $row["tags"] . '</td>
+                                    <td>' . $row["color"] . '</td>
 									<td>' . $row["category"] . '</td>
 									
 									<td>
@@ -209,6 +215,15 @@ if (isset($_POST['submit'])) {
                         <input name="q1[]" type="checkbox" value="handbag">Handbag
                         <input name="q1[]" type="checkbox" value="laptop">Laptop
                         <input name="q1[]" type="checkbox" value="headphone">Headphone
+                    </p>
+                    <p>
+                        <label>Colors </label>
+                        <input name="q2[]" type="checkbox" value="green">Green
+                        <input name="q2[]" type="checkbox" value="black">Black
+                        <input name="q2[]" type="checkbox" value="white">White
+                        <input name="q2[]" type="checkbox" value="cyan">Cyan
+                        <input name="q2[]" type="checkbox" value="olive">Olive
+                        <input name="q2[]" type="checkbox" value="orchid">Orchid
                     </p>
                     <p>
                         <label>Description</label>

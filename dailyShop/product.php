@@ -91,6 +91,7 @@ if (isset($_GET['id'])) {
   <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <!-- <script src="js/custom.js"></script> -->
 
 </head>
 <!-- !Important notice -->
@@ -450,6 +451,9 @@ if (isset($_GET['id'])) {
                 } else if (isset($_GET['val'])) {
                   $tags = $_GET['val'];
                   $sql = "SELECT * FROM productsnew   where tags LIKE '%{$tags}%'";
+                } else if (isset($_GET['color'])) {
+                  $color = $_GET['color'];
+                  $sql = "SELECT * FROM productsnew   where color  LIKE '%{$color}%'";
                 } else {
                   $sql = "SELECT * FROM productsnew limit {$offset},{$limit}";
                 }
@@ -557,7 +561,6 @@ if (isset($_GET['id'])) {
             <div class="aa-product-catg-pagination">
               <nav>
                 <?php
-
                 $sql1 = "Select * from productsnew";
 
                 $result1 = mysqli_query($conn, $sql1) or die("error");
@@ -565,7 +568,15 @@ if (isset($_GET['id'])) {
                   $total_records = mysqli_num_rows($result1);
                   $total_page = ceil($total_records / $limit); ?>
                   <div class="pagination">
-
+                    <?php if (isset($_GET['cat']) || isset($_GET['val']) || isset($_GET['color'])) {
+                      if (isset($_GET['cat'])) {
+                        $link = "cat=" . $_GET['cat'];
+                      } else  if (isset($_GET['val'])) {
+                        $link = "val=" . $_GET['val'];
+                      } else if (isset($_GET['color'])) {
+                        $link = "color=" . $_GET['color'];
+                      }
+                    } ?>
                   <?php if ($page > 1) {
                     echo '<a href="product.php?page=' . ($page - 1) . '" title="First Page">|Previous|</a>';
                   }
@@ -575,7 +586,7 @@ if (isset($_GET['id'])) {
                     } else {
                       $active = "";
                     }
-                    echo '<a  class="' . $active . '" href="product.php?page=' . $i . '" class="number" title="1">|' . $i . '|</a></li>';
+                    echo '<a  class="' . $active . '" href="product.php?' . $link . '&page=' . $i . '" class="number" title="1">|' . $i . '|</a></li>';
                   }
                   if ($total_page > $page) {
                     echo '<a href="product.php?page=' . ($page + 1) . '" title="Next Page">Next>></a>';
@@ -605,45 +616,48 @@ if (isset($_GET['id'])) {
               <h3>Tags</h3>
               <div class="tag-cloud">
                 <a href="product.php?val=fashion">Fashion</a>
-                <a href=" product.php?val=ecommerce">Ecommerce</a>
+                <a href="product.php?val=ecommerce">Ecommerce</a>
                 <a href="product.php?val=shop">Shop</a>
-                <a href=" product.php?val=handbag">Hand Bag</a>
+                <a href="product.php?val=handbag">Hand Bag</a>
                 <a href="product.php?val=laptop">Laptop</a>
-                <a href=" product.php?val=headphon">Head Phone</a>
+                <a href="product.php?val=headphon">Head Phone</a>
               </div>
             </div>
             <!-- single sidebar -->
             <div class="aa-sidebar-widget">
               <h3>Shop By Price</h3>
               <!-- price range -->
-              <div class="aa-sidebar-price-range">
-                <form action="product.php?id=skip-value-lower">
-                  <div id="skipstep" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
+              <div>
+                <form action="">
+                  <!-- <div id="skipstep" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
                   </div>
                   <span id="skip-value-lower" class="example-val"></span>
                   <span id="skip-value-upper" class="example-val"></span>
-                  <button class="aa-filter-btn" type="submit">Filter</button>
+                   -->
+                  <div id="slider-wrap" class="aa-sidebar-widget" class="aa-sidebar-price-range" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
+                    <div id="slider-range" style="width:250px;"></div>
+                  </div><br>
+                  <div>
+                    <label>Price Between:</label>
+                    <span id="age"></span>
+                  </div>
+                  <button class="aa-filter-btn" onclick="slider1()" type="submit">Filter</button>
+
                 </form>
               </div>
             </div>
             <!-- single sidebar -->
-            <!-- <div class="aa-sidebar-widget">
+            <div class="aa-sidebar-widget">
               <h3>Shop By Color</h3>
               <div class="aa-color-tag">
-                <a class="aa-color-green" href="#"></a>
-                <a class="aa-color-yellow" href="#"></a>
-                <a class="aa-color-pink" href="#"></a>
-                <a class="aa-color-purple" href="#"></a>
-                <a class="aa-color-blue" href="#"></a>
-                <a class="aa-color-orange" href="#"></a>
-                <a class="aa-color-gray" href="#"></a>
-                <a class="aa-color-black" href="#"></a>
-                <a class="aa-color-white" href="#"></a>
-                <a class="aa-color-cyan" href="#"></a>
-                <a class="aa-color-olive" href="#"></a>
-                <a class="aa-color-orchid" href="#"></a>
+                <a class="aa-color-green" href="product.php?color=green"></a>
+                <a class="aa-color-black" href="product.php?color=black"></a>
+                <a class="aa-color-white" href="product.php?color=white"></a>
+                <a class="aa-color-cyan" href="#product.php?color=cyan"></a>
+                <a class="aa-color-olive" href="product.php?color=olive"></a>
+                <a class="aa-color-orchid" href="product.php?color=orchid"></a>
               </div>
-            </div> -->
+            </div>
             <!-- single sidebar -->
             <div class="aa-sidebar-widget">
               <h3>Recently Views</h3>
